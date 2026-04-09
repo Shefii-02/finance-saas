@@ -8,6 +8,7 @@ const coaRoutes = require('./modules/coa/coa.routes');
 const customerRoutes = require('./modules/customers/customer.routes');
 const invoiceRoutes = require('./modules/invoices/invoice.routes');
 const journalRoutes = require('./modules/journals/journal.routes');
+const paymentRoutes = require('./modules/payments/payment.routes');
 const notFound = require('./middleware/not-found');
 const errorHandler = require('./middleware/error-handler');
 
@@ -32,6 +33,7 @@ app.use('/api/coa', coaRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api/invoices', invoiceRoutes);
 app.use('/api/journals', journalRoutes);
+app.use('/api/payments', paymentRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

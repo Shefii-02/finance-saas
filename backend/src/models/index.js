@@ -4,6 +4,7 @@ const { User, initUser } = require('./user.model');
 const { Account, initAccount } = require('./account.model');
 const { Customer, initCustomer } = require('./customer.model');
 const { Invoice, initInvoice } = require('./invoice.model');
+const { PaymentReceivable, initPaymentReceivable } = require('./payment-receivable.model');
 const { Journal, initJournal } = require('./journal.model');
 const { JournalLine, initJournalLine } = require('./journal-line.model');
 
@@ -12,6 +13,7 @@ initUser(sequelize);
 initAccount(sequelize);
 initCustomer(sequelize);
 initInvoice(sequelize);
+initPaymentReceivable(sequelize);
 initJournal(sequelize);
 initJournalLine(sequelize);
 
@@ -80,6 +82,36 @@ Invoice.belongsTo(Customer, {
   as: 'customer'
 });
 
+Tenant.hasMany(PaymentReceivable, {
+  foreignKey: 'tenant_id',
+  as: 'payments_receivable'
+});
+
+PaymentReceivable.belongsTo(Tenant, {
+  foreignKey: 'tenant_id',
+  as: 'tenant'
+});
+
+Invoice.hasMany(PaymentReceivable, {
+  foreignKey: 'invoice_id',
+  as: 'payments'
+});
+
+PaymentReceivable.belongsTo(Invoice, {
+  foreignKey: 'invoice_id',
+  as: 'invoice'
+});
+
+Customer.hasMany(PaymentReceivable, {
+  foreignKey: 'customer_id',
+  as: 'payments'
+});
+
+PaymentReceivable.belongsTo(Customer, {
+  foreignKey: 'customer_id',
+  as: 'customer'
+});
+
 Journal.belongsTo(Tenant, {
   foreignKey: 'tenant_id',
   as: 'tenant'
@@ -112,6 +144,7 @@ module.exports = {
   Account,
   Customer,
   Invoice,
+  PaymentReceivable,
   Journal,
   JournalLine
 };
