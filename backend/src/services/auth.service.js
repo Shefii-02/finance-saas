@@ -4,7 +4,8 @@ const { Op } = require('sequelize');
 const { StatusCodes } = require('http-status-codes');
 const env = require('../config/env');
 const AppError = require('../utils/app-error');
-const { sequelize, Tenant, User } = require('../models');
+const { sequelize, Tenant, User, Account } = require('../models');
+const { seedDefaultAccountsForTenant } = require('./default-coa.service');
 const tenantPlans = ['free', 'pro', 'enterprise'];
 
 function sanitizeUser(user) {
@@ -62,6 +63,12 @@ async function registerTenantAdmin(payload) {
       },
       { transaction }
     );
+
+    await seedDefaultAccountsForTenant({
+      Account,
+      tenantId: tenant.id,
+      transaction
+    });
 
     const password_hash = await bcrypt.hash(password, 10);
 
