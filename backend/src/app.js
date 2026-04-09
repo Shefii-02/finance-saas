@@ -1,0 +1,31 @@
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const healthRoutes = require('./modules/health/health.routes');
+const authRoutes = require('./modules/auth/auth.routes');
+const notFound = require('./middleware/not-found');
+const errorHandler = require('./middleware/error-handler');
+
+const app = express();
+
+app.use(helmet());
+app.use(cors());
+app.use(morgan('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.get('/api', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Finance SaaS API is running'
+  });
+});
+
+app.use('/api/health', healthRoutes);
+app.use('/api/auth', authRoutes);
+
+app.use(notFound);
+app.use(errorHandler);
+
+module.exports = app;
