@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const healthRoutes = require('./modules/health/health.routes');
 const authRoutes = require('./modules/auth/auth.routes');
 const coaRoutes = require('./modules/coa/coa.routes');
+const journalRoutes = require('./modules/journals/journal.routes');
 const notFound = require('./middleware/not-found');
 const errorHandler = require('./middleware/error-handler');
 
@@ -26,6 +27,7 @@ app.get('/api', (req, res) => {
 app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/coa', coaRoutes);
+app.use('/api/journals', journalRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
