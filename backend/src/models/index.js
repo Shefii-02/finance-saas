@@ -2,12 +2,16 @@ const sequelize = require('../config/database');
 const { Tenant, initTenant } = require('./tenant.model');
 const { User, initUser } = require('./user.model');
 const { Account, initAccount } = require('./account.model');
+const { Customer, initCustomer } = require('./customer.model');
+const { Invoice, initInvoice } = require('./invoice.model');
 const { Journal, initJournal } = require('./journal.model');
 const { JournalLine, initJournalLine } = require('./journal-line.model');
 
 initTenant(sequelize);
 initUser(sequelize);
 initAccount(sequelize);
+initCustomer(sequelize);
+initInvoice(sequelize);
 initJournal(sequelize);
 initJournalLine(sequelize);
 
@@ -46,6 +50,36 @@ Tenant.hasMany(Journal, {
   as: 'journals'
 });
 
+Tenant.hasMany(Customer, {
+  foreignKey: 'tenant_id',
+  as: 'customers'
+});
+
+Customer.belongsTo(Tenant, {
+  foreignKey: 'tenant_id',
+  as: 'tenant'
+});
+
+Tenant.hasMany(Invoice, {
+  foreignKey: 'tenant_id',
+  as: 'invoices'
+});
+
+Invoice.belongsTo(Tenant, {
+  foreignKey: 'tenant_id',
+  as: 'tenant'
+});
+
+Customer.hasMany(Invoice, {
+  foreignKey: 'customer_id',
+  as: 'invoices'
+});
+
+Invoice.belongsTo(Customer, {
+  foreignKey: 'customer_id',
+  as: 'customer'
+});
+
 Journal.belongsTo(Tenant, {
   foreignKey: 'tenant_id',
   as: 'tenant'
@@ -76,6 +110,8 @@ module.exports = {
   Tenant,
   User,
   Account,
+  Customer,
+  Invoice,
   Journal,
   JournalLine
 };
